@@ -9,3 +9,11 @@ body {
 ::selection {
   @apply bg-finance-accent/30 text-white;
 }
+
+.glass {
+  @apply bg-white/5 backdrop-blur-lg border border-white/10;
+}
+
+.card-gradient {
+  @apply bg-gradient-to-br from-white/10 to-transparent;
+}
