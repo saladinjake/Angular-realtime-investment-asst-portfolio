@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-finance-dark text-slate-100 antialiased font-sans;
+}
+
+::selection {
+  @apply bg-finance-accent/30 text-white;
+}
