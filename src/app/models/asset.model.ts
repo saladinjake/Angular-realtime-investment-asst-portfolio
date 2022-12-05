@@ -6,3 +6,8 @@ export interface Asset {
   type: 'stock' | 'crypto';
   history: number[];
 }
+
+export interface PortfolioAsset extends Asset {
+  quantity: number;
+  avgPurchasePrice: number;
+}
