@@ -27,7 +27,7 @@ export class MarketService {
         const volatility = asset.type === 'crypto' ? 0.02 : 0.005;
         const change = (Math.random() - 0.5) * 2 * volatility;
         const newPrice = asset.currentPrice * (1 + change);
-        
+
         return {
           ...asset,
           currentPrice: Number(newPrice.toFixed(2)),
@@ -37,4 +37,11 @@ export class MarketService {
       this.marketSubject.next(updatedAssets);
     });
   }
+
+  getAsset(symbol: string): Observable<Asset | undefined> {
+    return this.marketData$.pipe(
+      map(assets => assets.find(a => a.symbol === symbol))
+    );
+  }
 }
+
