@@ -17,5 +17,24 @@ export class MarketService {
   private marketSubject = new BehaviorSubject<Asset[]>(this.initialAssets);
   public marketData$ = this.marketSubject.asObservable().pipe(shareReplay(1));
 
-  constructor() {}
+  constructor() {
+    this.startMarketSimulation();
+  }
+
+  private startMarketSimulation() {
+    interval(3000).subscribe(() => {
+      const updatedAssets = this.marketSubject.value.map(asset => {
+        const volatility = asset.type === 'crypto' ? 0.02 : 0.005;
+        const change = (Math.random() - 0.5) * 2 * volatility;
+        const newPrice = asset.currentPrice * (1 + change);
+        
+        return {
+          ...asset,
+          currentPrice: Number(newPrice.toFixed(2)),
+          history: [...asset.history.slice(-19), Number(newPrice.toFixed(2))]
+        };
+      });
+      this.marketSubject.next(updatedAssets);
+    });
+  }
 }
