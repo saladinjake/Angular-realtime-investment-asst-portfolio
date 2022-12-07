@@ -15,5 +15,21 @@ export class PortfolioService {
 
   private holdingsSubject = new BehaviorSubject(this.initialHoldings);
 
+  public portfolio$: Observable<PortfolioAsset[]> = combineLatest([
+    this.holdingsSubject,
+    this.marketService.marketData$
+  ]).pipe(
+    map(([holdings, marketAssets]) => {
+      return holdings.map(h => {
+        const marketAsset = marketAssets.find(a => a.symbol === h.symbol)!;
+        return {
+          ...marketAsset,
+          quantity: h.quantity,
+          avgPurchasePrice: h.avgPurchasePrice
+        };
+      });
+    })
+  );
+
   constructor(private marketService: MarketService) {}
 }
