@@ -20,5 +20,20 @@ export class DashboardComponent implements OnInit {
     this.portfolio$ = this.portfolioService.portfolio$;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
+  getTotalValue(portfolio: PortfolioAsset[]): number {
+    return portfolio.reduce((acc, asset) => acc + (asset.currentPrice * asset.quantity), 0);
+  }
+
+  getTotalProfit(portfolio: PortfolioAsset[]): number {
+    return portfolio.reduce((acc, asset) => acc + ((asset.currentPrice - asset.avgPurchasePrice) * asset.quantity), 0);
+  }
+
+  getProfitPercentage(portfolio: PortfolioAsset[]): number {
+    const totalCost = portfolio.reduce((acc, asset) => acc + (asset.avgPurchasePrice * asset.quantity), 0);
+    const totalProfit = this.getTotalProfit(portfolio);
+    return totalCost === 0 ? 0 : (totalProfit / totalCost) * 100;
+  }
 }
+
