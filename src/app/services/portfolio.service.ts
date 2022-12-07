@@ -32,4 +32,19 @@ export class PortfolioService {
   );
 
   constructor(private marketService: MarketService) {}
+
+  buyAsset(symbol: string, quantity: number, price: number) {
+    const current = this.holdingsSubject.value;
+    const existing = current.find(h => h.symbol === symbol);
+    
+    if (existing) {
+      const newQuantity = existing.quantity + quantity;
+      const newAvgPrice = (existing.quantity * existing.avgPurchasePrice + quantity * price) / newQuantity;
+      const updated = current.map(h => h.symbol === symbol ? { ...h, quantity: newQuantity, avgPurchasePrice: newAvgPrice } : h);
+      this.holdingsSubject.next(updated);
+    } else {
+      this.holdingsSubject.next([...current, { symbol, quantity, avgPurchasePrice: price }]);
+    }
+  }
+}
 }
