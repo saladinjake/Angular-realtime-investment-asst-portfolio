@@ -104,5 +104,24 @@
         </table>
       </div>
     </div>
+
+    <!-- Live Market Ticker -->
+    <div class="glass p-8 rounded-[2.5rem] border border-white/5">
+      <h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+        <lucide-icon name="activity" [size]="20" class="text-finance-accent"></lucide-icon> Live Market Prices
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngFor="let asset of marketData$ | async" class="p-6 bg-white/5 rounded-3xl border border-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
+          <div>
+            <p class="text-xs font-black text-slate-500 uppercase tracking-widest mb-1">{{ asset.symbol }}</p>
+            <p class="text-lg font-black tracking-tight">${{ asset.currentPrice | number:'1.2-2' }}</p>
+          </div>
+          <div [class.text-finance-profit]="asset.change24h >= 0" [class.text-finance-loss]="asset.change24h < 0" class="text-right">
+            <lucide-icon [name]="asset.change24h >= 0 ? 'trending-up' : 'trending-down'" [size]="20"></lucide-icon>
+            <p class="text-xs font-bold">{{ asset.change24h }}%</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
