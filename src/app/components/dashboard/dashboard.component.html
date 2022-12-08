@@ -47,5 +47,62 @@
         </h2>
       </div>
     </div>
+
+    <!-- Holdings List -->
+    <div class="glass rounded-[2.5rem] overflow-hidden border border-white/5 mb-12">
+      <div class="p-8 border-b border-white/5 flex items-center justify-between">
+        <h3 class="text-xl font-bold flex items-center gap-3">
+          <lucide-icon name="pie-chart" [size]="20" class="text-finance-accent"></lucide-icon> Current Holdings
+        </h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="text-slate-500 text-xs font-black uppercase tracking-widest border-b border-white/5">
+              <th class="px-8 py-6">Asset</th>
+              <th class="px-8 py-6">Balance</th>
+              <th class="px-8 py-6">Price</th>
+              <th class="px-8 py-6">Avg. Cost</th>
+              <th class="px-8 py-6 text-right">Profit/Loss</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="portfolio$ | async as portfolio">
+            <tr *ngFor="let asset of portfolio" class="group hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
+              <td class="px-8 py-6">
+                <div class="flex items-center gap-4">
+                  <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center font-black text-xs text-finance-accent border border-white/5">
+                    {{ asset.symbol }}
+                  </div>
+                  <div>
+                    <p class="font-bold text-white">{{ asset.name }}</p>
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-tighter">{{ asset.type }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-8 py-6">
+                <p class="font-bold text-white">{{ asset.quantity }} {{ asset.symbol }}</p>
+                <p class="text-xs text-slate-500">${{ (asset.quantity * asset.currentPrice) | number:'1.2-2' }}</p>
+              </td>
+              <td class="px-8 py-6">
+                <p class="font-bold text-white">${{ asset.currentPrice | number:'1.2-2' }}</p>
+              </td>
+              <td class="px-8 py-6">
+                <p class="font-bold text-slate-400">${{ asset.avgPurchasePrice | number:'1.2-2' }}</p>
+              </td>
+              <td class="px-8 py-6 text-right">
+                <div [class.text-finance-profit]="(asset.currentPrice - asset.avgPurchasePrice) >= 0" [class.text-finance-loss]="(asset.currentPrice - asset.avgPurchasePrice) < 0">
+                  <p class="font-black text-lg">
+                    {{ (asset.currentPrice - asset.avgPurchasePrice) >= 0 ? '+' : '' }}${{ ((asset.currentPrice - asset.avgPurchasePrice) * asset.quantity) | number:'1.2-2' }}
+                  </p>
+                  <p class="text-xs font-bold opacity-60">
+                    {{ (asset.currentPrice - asset.avgPurchasePrice) / asset.avgPurchasePrice | percent:'1.1-1' }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </main>
 </div>
